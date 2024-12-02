@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>edit campgrounds</title>
+    
+  </head>
+  <body>
+    <h1>
+      edit campground
+    </h1>
+
+
+    <form action="/campgrounds/<%=campground._id%>?_method=PUT" method="POST">
+        <div>
+            <label for="title">title</label>
+            <input type="text" id="title" name="campground[title]" value="<%=campground.title%>">
+        </div>
+        <div>
+            <label for="location">Image</label>
+            <input type="text" id="location" name="campground[location]" value="<%=campground.location%>" >
+        </div>
+        
+        <button>update</button>
+
+    </form>
+    <a href="/campgrounds/<%= campground._id%>">back to  campground</a>
+
+
+
+
+
+    </body>
+</html>
+
+   
