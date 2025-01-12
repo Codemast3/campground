@@ -31,7 +31,7 @@ router.get("/", catchAsync(async (req, res) => {
 
 
 
-router.get("/",(req,res) => {
+router.get("/new",(req,res) => {
     res.render('campgrounds/new')
 }
 )
