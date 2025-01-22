@@ -8,37 +8,16 @@ const ExpressError = require('../utils/expresserror');
 const {campgroundSchema,
     reviewSchema
 } = require('../schema.js')
-const validateReview = (req,res,next) => {
-    const {error} = reviewSchema.validate(req.body);    
-    if(error){
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg,400)
-        }
-        else{
-            next();
-        }
-        }
+const review = require('../models/review');
+const {validateReview,isLoggedIn,isReviewAuthor} = require('../middleware')
+const reviews = require('../controllers/reviews')
 
 
-router.post('/',validateReview,catchAsync(async(req,res) => {
-    const campground = await Campground.findById(req.params.id);
-    const review = new Review(req.body.review);
-    campground.reviews.push(review);
-    await review.save();
-    await campground.save();
-    req.flash('success','New review added!')
-    res.redirect(`/campgrounds/${campground._id}`)
-   
-}
-)
-)
 
-router.delete('/:reviewId',catchAsync(async(req,res) => {
-    const {id,reviewId} = req.params;
-    await Campground.findByIdAndUpdate(id,{$pull:{reviews:reviewId}})
-    await Review.findByIdAndDelete(reviewId);
-    res.redirect(`/campgrounds/${id}`)
-    })
+router.post('/',isLoggedIn,validateReview,catchAsync(reviews.createReview))
+
+
+router.delete('/:reviewId',isLoggedIn,isReviewAuthor,catchAsync(reviews.deleteReview)
 )
 
 module.exports = router;
